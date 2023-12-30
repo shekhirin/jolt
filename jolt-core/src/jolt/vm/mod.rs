@@ -14,7 +14,7 @@ use crate::jolt::{
     subtable::LassoSubtable,
 };
 use crate::poly::structured_poly::BatchablePolynomials;
-use crate::r1cs::snark::{run_jolt_spartan_with_circuit, JoltCircuit};
+use crate::r1cs::snark::{JoltCircuit};
 use crate::utils::{errors::ProofVerifyError, random::RandomTape};
 use crate::{
     lasso::{
