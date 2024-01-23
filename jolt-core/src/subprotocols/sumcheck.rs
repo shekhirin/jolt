@@ -200,6 +200,7 @@ impl<F: PrimeField> CubicSumcheckParams<F> {
         all_polys_iter.par_iter_mut().for_each(|poly| poly.bound_poly_var_top(&r_j));
     }
 
+    #[tracing::instrument(skip_all, name = "get_final_evals")]
     pub fn get_final_evals(&self) -> (Vec<F>, Vec<F>, F) {
         debug_assert_eq!(self.poly_As[0].len(), 1);
         debug_assert_eq!(self.poly_Bs[0].len(), 1);
