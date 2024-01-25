@@ -495,14 +495,14 @@ fn fibonacci() -> Vec<(tracing::Span, Box<dyn FnOnce()>)> {
 fn sparse_ml_poly_bind() -> Vec<(tracing::Span, Box<dyn FnOnce()>)> {
     let mut tasks = Vec::new();
 
-    let log_size = 24;
+    let log_size = 28;
     let mut sparse_poly = crate::subprotocols::sparse::bench::init_bind_bench::<Fr>(log_size, 0.93);
     let mut dense_poly = sparse_poly.clone().to_dense();
 
     let mut rng = test_rng();
     let r = Fr::rand(&mut rng);
     let task = move || {
-        sparse_poly.bound_poly_var_top_iter(&r);
+        black_box(sparse_poly.bound_poly_var_top(&r));
     };
 
     tasks.push((
@@ -511,7 +511,7 @@ fn sparse_ml_poly_bind() -> Vec<(tracing::Span, Box<dyn FnOnce()>)> {
     ));
 
     let task = move || {
-        dense_poly.bound_poly_var_top_many_ones(&r);
+        black_box(dense_poly.bound_poly_var_top_many_ones(&r));
     };
 
     tasks.push((
