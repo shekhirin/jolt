@@ -298,7 +298,7 @@ impl<F: PrimeField, G: CurveGroup<ScalarField = F>> UniformSpartanProof<F, G> {
         <Transcript as ProofTranscript<G>>::append_scalars(
             transcript,
             b"claims_outer",
-            &[claim_Az, claim_Bz, claim_Cz].as_slice(),
+            [claim_Az, claim_Bz, claim_Cz].as_slice(),
         );
 
         // inner sum-check
@@ -425,11 +425,10 @@ impl<F: PrimeField, G: CurveGroup<ScalarField = F>> UniformSpartanProof<F, G> {
             segmented_padded_witness.into_dense_polys();
         let witness_segment_polys_ref: Vec<&DensePolynomial<F>> = witness_segment_polys
             .iter()
-            .map(|poly_ref| poly_ref)
             .collect();
         let opening_proof = BatchedHyraxOpeningProof::prove(
             &witness_segment_polys_ref,
-            &r_y_point,
+            r_y_point,
             &witness_evals,
             transcript,
         );
@@ -492,7 +491,7 @@ impl<F: PrimeField, G: CurveGroup<ScalarField = F>> UniformSpartanProof<F, G> {
         <Transcript as ProofTranscript<G>>::append_scalars(
             transcript,
             b"claims_outer",
-            &[
+            [
                 self.outer_sumcheck_claims.0,
                 self.outer_sumcheck_claims.1,
                 self.outer_sumcheck_claims.2,
@@ -562,8 +561,8 @@ impl<F: PrimeField, G: CurveGroup<ScalarField = F>> UniformSpartanProof<F, G> {
         That is, it ignores the case where x is all 1s, outputting 0.
         Assumes x and y are provided big-endian. */
         let plus_1_mle = |x: &[F], y: &[F], l: usize| -> F {
-            let one = F::from(1 as u64);
-            let _two = F::from(2 as u64);
+            let one = F::from(1_u64);
+            let _two = F::from(2_u64);
 
             /* If y+1 = x, then the two bit vectors are of the following form.
                 Let k be the longest suffix of 1s in x.
@@ -635,8 +634,8 @@ impl<F: PrimeField, G: CurveGroup<ScalarField = F>> UniformSpartanProof<F, G> {
         let r_y_point = &inner_sumcheck_r[n_prefix..];
         self.opening_proof
             .verify(
-                &generators,
-                &r_y_point,
+                generators,
+                r_y_point,
                 &self.claimed_witnesss_evals,
                 &witness_segment_commitments,
                 transcript,

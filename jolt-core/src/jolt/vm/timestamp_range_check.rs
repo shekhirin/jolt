@@ -201,7 +201,7 @@ where
             .chain(self.final_cts_read_timestamp.iter())
             .chain(self.final_cts_global_minus_read.iter())
             .collect();
-        let commitments = HyraxCommitment::batch_commit_polys(polys, &generators);
+        let commitments = HyraxCommitment::batch_commit_polys(polys, generators);
 
         Self::Commitment { commitments }
     }
@@ -479,7 +479,6 @@ where
         let t_read_openings = openings.memory_t_read;
 
         (0..MEMORY_OPS_PER_INSTRUCTION)
-            .into_iter()
             .flat_map(|i| {
                 [
                     (
@@ -504,7 +503,6 @@ where
         let t_read_openings = openings.memory_t_read;
 
         (0..MEMORY_OPS_PER_INSTRUCTION)
-            .into_iter()
             .flat_map(|i| {
                 [
                     (
@@ -538,7 +536,6 @@ where
         openings: &Self::InitFinalOpenings,
     ) -> Vec<Self::MemoryTuple> {
         (0..MEMORY_OPS_PER_INSTRUCTION)
-            .into_iter()
             .flat_map(|i| {
                 [
                     (
@@ -581,7 +578,7 @@ where
         transcript: &mut Transcript,
     ) -> Self {
         let (batched_grand_product, multiset_hashes, r_grand_product) =
-            TimestampValidityProof::prove_grand_products(&range_check_polys, transcript);
+            TimestampValidityProof::prove_grand_products(range_check_polys, transcript);
 
         let polys_iter = range_check_polys
             .read_cts_read_timestamp
@@ -724,10 +721,10 @@ where
             .openings
             .read_cts_read_timestamp
             .into_iter()
-            .chain(self.openings.read_cts_global_minus_read.into_iter())
-            .chain(self.openings.final_cts_read_timestamp.into_iter())
-            .chain(self.openings.final_cts_global_minus_read.into_iter())
-            .chain(self.openings.memory_t_read.into_iter())
+            .chain(self.openings.read_cts_global_minus_read)
+            .chain(self.openings.final_cts_read_timestamp)
+            .chain(self.openings.final_cts_global_minus_read)
+            .chain(self.openings.memory_t_read)
             .collect();
 
         let t_read_commitments = &memory_commitment.trace_commitments

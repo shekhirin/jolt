@@ -218,12 +218,12 @@ impl<F: PrimeField> DensePolynomial<F> {
     }
 
     pub fn evaluate_at_chi(&self, chis: &Vec<F>) -> F {
-        compute_dotproduct(&self.Z, &chis)
+        compute_dotproduct(&self.Z, chis)
     }
 
     pub fn evaluate_at_chi_low_optimized(&self, chis: &Vec<F>) -> F {
         assert_eq!(self.Z.len(), chis.len());
-        compute_dotproduct_low_optimized(&self.Z, &chis)
+        compute_dotproduct_low_optimized(&self.Z, chis)
     }
 
     pub fn evals(&self) -> Vec<F> {

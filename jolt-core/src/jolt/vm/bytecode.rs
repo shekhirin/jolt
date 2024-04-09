@@ -365,9 +365,9 @@ where
             &self.v_read_write[3],
             &self.v_read_write[4],
         ];
-        let trace_commitments = HyraxCommitment::batch_commit_polys(trace_polys, &generators);
+        let trace_commitments = HyraxCommitment::batch_commit_polys(trace_polys, generators);
 
-        let t_final_commitment = HyraxCommitment::commit(&self.t_final, &generators);
+        let t_final_commitment = HyraxCommitment::commit(&self.t_final, generators);
 
         Self::Commitment {
             trace_commitments,
@@ -608,8 +608,8 @@ where
         transcript: &mut Transcript,
     ) -> Self::Proof {
         let mut combined_openings: Vec<F> = vec![
-            openings.a_read_write_opening.clone(),
-            openings.t_read_opening.clone(),
+            openings.a_read_write_opening,
+            openings.t_read_opening,
         ];
         combined_openings.extend(openings.v_read_write_openings.iter());
 
@@ -623,7 +623,7 @@ where
                 &polynomials.v_read_write[3],
                 &polynomials.v_read_write[4],
             ],
-            &opening_point,
+            opening_point,
             &combined_openings,
             transcript,
         )
@@ -638,8 +638,8 @@ where
         transcript: &mut Transcript,
     ) -> Result<(), ProofVerifyError> {
         let mut combined_openings: Vec<F> = vec![
-            self.a_read_write_opening.clone(),
-            self.t_read_opening.clone(),
+            self.a_read_write_opening,
+            self.t_read_opening,
         ];
         combined_openings.extend(self.v_read_write_openings.iter());
 
@@ -690,7 +690,7 @@ where
         _openings: &Self,
         transcript: &mut Transcript,
     ) -> Self::Proof {
-        HyraxOpeningProof::prove(&polynomials.t_final, &opening_point, transcript)
+        HyraxOpeningProof::prove(&polynomials.t_final, opening_point, transcript)
     }
 
     fn compute_verifier_openings(

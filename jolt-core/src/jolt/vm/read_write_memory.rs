@@ -937,10 +937,10 @@ where
         let openings = self
             .a_read_write_opening
             .into_iter()
-            .chain(self.v_read_opening.into_iter())
-            .chain(self.v_write_opening.into_iter())
-            .chain(self.t_read_opening.into_iter())
-            .chain(self.t_write_ram_opening.into_iter())
+            .chain(self.v_read_opening)
+            .chain(self.v_write_opening)
+            .chain(self.t_read_opening)
+            .chain(self.t_write_ram_opening)
             .collect::<Vec<_>>();
         opening_proof.verify(
             generators,
@@ -1015,7 +1015,7 @@ where
                 &polynomials.read_write_memory.v_final,
                 &polynomials.read_write_memory.t_final,
             ],
-            &opening_point,
+            opening_point,
             &[openings.v_final, openings.t_final],
             transcript,
         );
@@ -1061,7 +1061,7 @@ where
         opening_proof.v_t_opening_proof.verify(
             generators,
             opening_point,
-            &vec![self.v_final, self.t_final],
+            &[self.v_final, self.t_final],
             &[
                 &commitment.read_write_memory.v_final_commitment,
                 &commitment.read_write_memory.t_final_commitment,
@@ -1354,7 +1354,6 @@ where
         let eq: DensePolynomial<F> = DensePolynomial::new(EqPolynomial::new(r_eq.to_vec()).evals());
 
         let io_witness_range: Vec<_> = (0..polynomials.memory_size as u64)
-            .into_iter()
             .map(|i| {
                 if i >= INPUT_START_ADDRESS && i < RAM_WITNESS_OFFSET {
                     F::one()
@@ -1436,7 +1435,6 @@ where
         // TODO(moodlezoup): Compute openings without instantiating io_witness_range polynomial itself
         let memory_size = proof.num_rounds.pow2();
         let io_witness_range: Vec<_> = (0..memory_size as u64)
-            .into_iter()
             .map(|i| {
                 if i >= INPUT_START_ADDRESS && i < RAM_WITNESS_OFFSET {
                     F::one()
@@ -1511,7 +1509,7 @@ where
         transcript: &mut Transcript,
     ) -> Self {
         let memory_checking_proof =
-            ReadWriteMemoryProof::prove_memory_checking(preprocessing, &polynomials, transcript);
+            ReadWriteMemoryProof::prove_memory_checking(preprocessing, polynomials, transcript);
 
         let output_proof = OutputSumcheckProof::prove_outputs(
             &polynomials.read_write_memory,

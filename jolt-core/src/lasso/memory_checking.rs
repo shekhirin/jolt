@@ -218,7 +218,7 @@ where
     ) -> (BatchedGrandProductCircuit<F>, Vec<F>) {
         let read_write_circuits: Vec<GrandProductCircuit<F>> = read_write_leaves
             .par_iter()
-            .map(|leaves| GrandProductCircuit::new(&leaves))
+            .map(|leaves| GrandProductCircuit::new(leaves))
             .collect();
         let read_write_hashes: Vec<F> = read_write_circuits
             .par_iter()
@@ -241,7 +241,7 @@ where
     ) -> (BatchedGrandProductCircuit<F>, Vec<F>) {
         let init_final_circuits: Vec<GrandProductCircuit<F>> = init_final_leaves
             .par_iter()
-            .map(|leaves| GrandProductCircuit::new(&leaves))
+            .map(|leaves| GrandProductCircuit::new(leaves))
             .collect();
         let init_final_hashes: Vec<F> = init_final_circuits
             .par_iter()

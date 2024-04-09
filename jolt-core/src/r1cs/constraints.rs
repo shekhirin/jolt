@@ -428,7 +428,7 @@ impl R1CSBuilder {
             smallvec![(rs1_val, 1)],
             smallvec![
                 (PC_mapped, 4),
-                (0, PC_START_ADDRESS as i64 - 1 * PC_NOOP_SHIFT as i64)
+                (0, PC_START_ADDRESS as i64 - PC_NOOP_SHIFT as i64)
             ],
         );
         let y = R1CSBuilder::if_else_simple(
@@ -454,7 +454,7 @@ impl R1CSBuilder {
                 (rs1_val, 1),
                 (immediate_signed, 1),
                 (GET_INDEX(InputType::MemregARW, 0), -1),
-                (0, -1 * MEMORY_START_ADDRESS as i64)
+                (0, -(MEMORY_START_ADDRESS as i64))
             ],
             smallvec![],
         );
@@ -514,7 +514,7 @@ impl R1CSBuilder {
                 (combined_z_chunks, 1),
                 (x, -1),
                 (y, 1),
-                (0, -1 * (ALL_ONES + 1))
+                (0, -(ALL_ONES + 1))
             ],
             smallvec![],
         );
@@ -567,7 +567,7 @@ impl R1CSBuilder {
                 smallvec![
                     (GET_INDEX(InputType::ChunksQuery, i), 1),
                     (chunk_y_used_i, -1),
-                    (GET_INDEX(InputType::ChunksX, i), (1 << L_CHUNK) * -1)
+                    (GET_INDEX(InputType::ChunksX, i), -(1 << L_CHUNK))
                 ],
                 smallvec![(is_concat, 1)],
                 smallvec![],
@@ -748,7 +748,7 @@ impl R1CSBuilder {
             aux[next_pc_j]
         } else {
             inputs.input_pc * four
-                + F::from_u64(PC_START_ADDRESS as u64).unwrap()
+                + F::from_u64(PC_START_ADDRESS).unwrap()
                 + aux[imm_signed_index]
         });
 

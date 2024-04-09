@@ -58,13 +58,13 @@ where
         let _read_write_num_vars = self.dim[0].get_num_vars();
         let dim_read_polys: Vec<&DensePolynomial<F>> =
             self.dim.iter().chain(self.read_cts.iter()).collect();
-        let dim_read_commitment = HyraxCommitment::batch_commit_polys(dim_read_polys, &generators);
+        let dim_read_commitment = HyraxCommitment::batch_commit_polys(dim_read_polys, generators);
         let E_commitment =
-            HyraxCommitment::batch_commit_polys(self.E_polys.iter().collect(), &generators);
+            HyraxCommitment::batch_commit_polys(self.E_polys.iter().collect(), generators);
 
         let _final_num_vars = self.final_cts[0].get_num_vars();
         let final_commitment =
-            HyraxCommitment::batch_commit_polys(self.final_cts.iter().collect(), &generators);
+            HyraxCommitment::batch_commit_polys(self.final_cts.iter().collect(), generators);
 
         Self::Commitment {
             dim_read_commitment,
@@ -119,7 +119,7 @@ where
         opening_proof.verify(
             generators,
             opening_point,
-            &self,
+            self,
             &commitment.E_commitment.iter().collect::<Vec<_>>(),
             transcript,
         )
@@ -568,7 +568,7 @@ where
 
         let num_lookups = ops.len().next_power_of_two();
         let polynomials = Self::construct_polys(preprocessing, &ops);
-        let commitment = polynomials.commit(&generators);
+        let commitment = polynomials.commit(generators);
 
         let num_rounds = num_lookups.log_2();
         let instruction = Instruction::default();
@@ -626,7 +626,7 @@ where
         };
 
         let memory_checking =
-            SurgeProof::prove_memory_checking(&preprocessing, &polynomials, transcript);
+            SurgeProof::prove_memory_checking(preprocessing, &polynomials, transcript);
 
         SurgeProof {
             commitment,

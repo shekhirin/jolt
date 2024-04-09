@@ -167,7 +167,7 @@ where
             .chain(instruction_trace_polys.into_iter())
             .collect::<Vec<_>>();
         let mut trace_comitments =
-            HyraxCommitment::<NUM_R1CS_POLYS, G>::batch_commit_polys(all_trace_polys, &generators);
+            HyraxCommitment::<NUM_R1CS_POLYS, G>::batch_commit_polys(all_trace_polys, generators);
 
         let bytecode_trace_commitment = trace_comitments
             .drain(..num_bytecode_trace_polys)
@@ -181,14 +181,14 @@ where
         let instruction_trace_commitment = trace_comitments;
 
         let bytecode_t_final_commitment =
-            HyraxCommitment::<1, G>::commit(&self.bytecode.t_final, &generators);
+            HyraxCommitment::<1, G>::commit(&self.bytecode.t_final, generators);
         let (memory_v_final_commitment, memory_t_final_commitment) = rayon::join(
-            || HyraxCommitment::<1, G>::commit(&self.read_write_memory.v_final, &generators),
-            || HyraxCommitment::<1, G>::commit(&self.read_write_memory.t_final, &generators),
+            || HyraxCommitment::<1, G>::commit(&self.read_write_memory.v_final, generators),
+            || HyraxCommitment::<1, G>::commit(&self.read_write_memory.t_final, generators),
         );
         let instruction_final_commitment = HyraxCommitment::<64, G>::batch_commit_polys(
             self.instruction_lookups.final_cts.iter().collect(),
-            &generators,
+            generators,
         );
 
         JoltCommitments {
@@ -464,7 +464,7 @@ pub trait Jolt<F: PrimeField, G: CurveGroup<ScalarField = F>, const C: usize, co
             preprocessing,
             generators,
             proof,
-            &commitment,
+            commitment,
             transcript,
         )
     }
@@ -523,8 +523,8 @@ pub trait Jolt<F: PrimeField, G: CurveGroup<ScalarField = F>, const C: usize, co
                     .enumerate()
                 {
                     let flat_chunk_index = instruction_index + chunk_index * padded_trace_length;
-                    chunks_x[flat_chunk_index] = F::from_u64(x as u64).unwrap();
-                    chunks_y[flat_chunk_index] = F::from_u64(y as u64).unwrap();
+                    chunks_x[flat_chunk_index] = F::from_u64(x).unwrap();
+                    chunks_y[flat_chunk_index] = F::from_u64(y).unwrap();
                 }
             } else {
                 for chunk_index in 0..C {

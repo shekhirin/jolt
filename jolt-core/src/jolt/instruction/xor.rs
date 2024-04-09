@@ -36,7 +36,7 @@ impl JoltInstruction for XORInstruction {
     }
 
     fn lookup_entry(&self) -> u64 {
-        (self.0 ^ self.1).into()
+        (self.0 ^ self.1)
     }
 
     fn random(&self, rng: &mut StdRng) -> Self {

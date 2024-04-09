@@ -83,7 +83,7 @@ impl Program {
 
             let output = Command::new("cargo")
                 .envs(envs)
-                .args(&[
+                .args([
                     "build",
                     "--release",
                     "--features",

@@ -251,7 +251,7 @@ impl<const RATIO: usize, G: CurveGroup> BatchedHyraxOpeningProof<RATIO, G> {
         <Transcript as ProofTranscript<G>>::append_protocol_name(transcript, Self::protocol_name());
 
         // append the claimed evaluations to transcript
-        <Transcript as ProofTranscript<G>>::append_scalars(transcript, b"evals_ops_val", &openings);
+        <Transcript as ProofTranscript<G>>::append_scalars(transcript, b"evals_ops_val", openings);
 
         let rlc_coefficients: Vec<_> = <Transcript as ProofTranscript<G>>::challenge_vector(
             transcript,
@@ -322,7 +322,7 @@ impl<const RATIO: usize, G: CurveGroup> BatchedHyraxOpeningProof<RATIO, G> {
         <Transcript as ProofTranscript<G>>::append_protocol_name(transcript, Self::protocol_name());
 
         // append the claimed evaluations to transcript
-        <Transcript as ProofTranscript<G>>::append_scalars(transcript, b"evals_ops_val", &openings);
+        <Transcript as ProofTranscript<G>>::append_scalars(transcript, b"evals_ops_val", openings);
 
         let rlc_coefficients: Vec<_> = <Transcript as ProofTranscript<G>>::challenge_vector(
             transcript,
